@@ -33,6 +33,10 @@ class HighlightItem(QtWidgets.QGraphicsObject):
         self._rect = rect
         self.update()
 
+    def rect(self) -> QtCore.QRectF:
+        """Return the item's rectangle."""
+        return self._rect
+
     # context menu ----------------------------------------------------------
     def contextMenuEvent(self, event: QtWidgets.QGraphicsSceneContextMenuEvent):
         menu = QtWidgets.QMenu()
