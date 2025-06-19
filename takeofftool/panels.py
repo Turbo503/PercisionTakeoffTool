@@ -26,7 +26,7 @@ class TakeoffPanel(QtWidgets.QWidget):
     importRequested = QtCore.pyqtSignal()
     totalsUpdated = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, *, include_wire: bool = True):
+    def __init__(self, parent=None, *, include_wire: bool = False):
         super().__init__(parent)
         self.include_wire = include_wire
 
@@ -81,6 +81,7 @@ class TakeoffPanel(QtWidgets.QWidget):
         count_lbl = QtWidgets.QLabel("Count: 0")
         name_f = QtWidgets.QLineEdit()
         name_f.setPlaceholderText("Name")
+        name_f.setMinimumWidth(200)
         labor_lbl = QtWidgets.QLabel("Labor:")
         labor_f = QtWidgets.QLineEdit()
         labor_f.setPlaceholderText("0.0")
