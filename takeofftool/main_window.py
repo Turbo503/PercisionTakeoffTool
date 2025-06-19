@@ -43,8 +43,10 @@ class MainWindow(QtWidgets.QMainWindow):
         sl = QtWidgets.QHBoxLayout(sf)
         self.sum_hours = QtWidgets.QLabel("Total Hours: 0.00")
         self.sum_devices = QtWidgets.QLabel("Total Devices: 0")
+        self.sum_points = QtWidgets.QLabel("Total Points: 0")
         sl.addWidget(self.sum_hours)
         sl.addWidget(self.sum_devices)
+        sl.addWidget(self.sum_points)
         rlay.addWidget(sf)
 
         self.category_tabs = QtWidgets.QTabWidget()
@@ -57,9 +59,15 @@ class MainWindow(QtWidgets.QMainWindow):
         splitter.setSizes([120, 900, 180])
 
         self.panels: dict[str, TakeoffPanel] = {}
-        for name in ["General", "Lighting", "Mechanical", "Demo"]:
-            use_wire = name != "Demo"
-            p = TakeoffPanel(include_wire=use_wire)
+        for name in [
+            "General",
+            "Lighting",
+            "Mechanical",
+            "Fire Alarm",
+            "Low Voltage",
+            "Demo",
+        ]:
+            p = TakeoffPanel(include_wire=False)
             p.setPdfView(self.pdf_view)
             self.category_tabs.addTab(p, name)
             self.panels[name] = p
@@ -97,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pdf_view.setDrawingMode(True)
 
     def update_summary(self):
-        total_hours, total_devices = 0.0, 0
+        total_hours, total_devices, total_points = 0.0, 0, 0
         for name, panel in self.panels.items():
             for it in panel.takeoff_items:
                 cnt = len([h for h in it["highlights"] if h.scene()])
@@ -108,8 +116,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 total_hours += cnt * lab
                 if name != "Demo":
                     total_devices += cnt
+                total_points += cnt
         self.sum_hours.setText(f"Total Hours: {total_hours:.2f}")
         self.sum_devices.setText(f"Total Devices: {total_devices}")
+        self.sum_points.setText(f"Total Points: {total_points}")
 
     # Thumbnail handling -------------------------------------------------
     def populateThumbnails(self):

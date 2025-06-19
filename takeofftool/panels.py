@@ -15,6 +15,25 @@ color_options = {
     "Yellow": "#FFFF00",
     "Magenta": "#FF00FF",
     "Cyan": "#00FFFF",
+    "Maroon": "#800000",
+    "Dark Green": "#008000",
+    "Navy": "#000080",
+    "Olive": "#808000",
+    "Purple": "#800080",
+    "Teal": "#008080",
+    "Silver": "#C0C0C0",
+    "Orange": "#FFA500",
+    "Brown": "#A52A2A",
+    "Burly Wood": "#DEB887",
+    "Cadet Blue": "#5F9EA0",
+    "Chartreuse": "#7FFF00",
+    "Chocolate": "#D2691E",
+    "Coral": "#FF7F50",
+    "Cornflower Blue": "#6495ED",
+    "Crimson": "#DC143C",
+    "Dark Turquoise": "#00CED1",
+    "Dark Violet": "#9400D3",
+    "Gold": "#FFD700",
 }
 
 
@@ -26,7 +45,7 @@ class TakeoffPanel(QtWidgets.QWidget):
     importRequested = QtCore.pyqtSignal()
     totalsUpdated = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None, *, include_wire: bool = True):
+    def __init__(self, parent=None, *, include_wire: bool = False):
         super().__init__(parent)
         self.include_wire = include_wire
 
@@ -81,6 +100,7 @@ class TakeoffPanel(QtWidgets.QWidget):
         count_lbl = QtWidgets.QLabel("Count: 0")
         name_f = QtWidgets.QLineEdit()
         name_f.setPlaceholderText("Name")
+        name_f.setMinimumWidth(200)
         labor_lbl = QtWidgets.QLabel("Labor:")
         labor_f = QtWidgets.QLineEdit()
         labor_f.setPlaceholderText("0.0")
