@@ -130,7 +130,7 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
         if hasattr(self, "_pixmap_item") and self._pixmap_item:
             self._scene.removeItem(self._pixmap_item)  # type: ignore[attr-defined]
         page = self.doc.load_page(page_num)
-        pix = page.get_pixmap()
+        pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))
         img = QtGui.QImage(
             pix.samples, pix.width, pix.height, pix.stride, QtGui.QImage.Format_RGB888
         )
