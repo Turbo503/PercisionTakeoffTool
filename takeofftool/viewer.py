@@ -144,12 +144,18 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
     # ------------------------------------------------------------------
     def load_pdf(self, pdf_path: str):
         """Load ``pdf_path`` without holding a filesystem lock."""
+        if self.doc:
+            try:
+                self.doc.close()
+            except Exception:
+                pass
+            self.doc = None
+
         try:
             with open(pdf_path, "rb") as fh:
                 data = fh.read()
             # store for later exports
             self.pdf_bytes = data
-
             # open from memory so the original file isn't locked
             self.doc = fitz.open(stream=data, filetype="pdf")
         except Exception as e:
