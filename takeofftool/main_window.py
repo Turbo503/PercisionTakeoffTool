@@ -275,7 +275,6 @@ class MainWindow(QtWidgets.QMainWindow):
             # fallback: clone the currently displayed document
             data = self.pdf_view.doc.write()
         doc = fitz.open(stream=data, filetype="pdf")
-
         for page_index in range(doc.page_count):
             page = doc.load_page(page_index)
             for panel in self.panels.values():
@@ -285,7 +284,8 @@ class MainWindow(QtWidgets.QMainWindow):
                             continue
                         if isinstance(h, HighlightItem):
                             rect = fitz.Rect(h.rect())
-                            page.draw_rect(rect, color=h._color.getRgb()[:3], fill=h._color.getRgb()[:3], overlay=True)
+                            color = h._color.getRgbF()[:3]
+                            page.draw_rect(rect, color=color, fill=color, overlay=True)
                         elif isinstance(h, LineItem):
                             line = h.line()
                             p1 = fitz.Point(line.x1(), line.y1())
@@ -293,7 +293,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             page.draw_line(
                                 p1,
                                 p2,
-                                color=h.pen().color().getRgb()[:3],
+                                color=h.pen().color().getRgbF()[:3],
                                 width=h.pen().widthF(),
                                 overlay=True,
                             )
