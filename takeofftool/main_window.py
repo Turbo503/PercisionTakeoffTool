@@ -271,16 +271,11 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         # build a fresh document from the originally loaded bytes
         data = getattr(self.pdf_view, "pdf_bytes", None)
-        if data:
-            base_doc = fitz.open(stream=data, filetype="pdf")
-            doc = fitz.open()
-            doc.insert_pdf(base_doc)
-            base_doc.close()
+        if data is None:
+            # fallback: clone the currently displayed document
+            data = self.pdf_view.doc.write()
+        doc = fitz.open(stream=data, filetype="pdf")
 
-        else:
-            # fallback to using the in-memory document directly
-            doc = fitz.open()
-            doc.insert_pdf(self.pdf_view.doc)
         for page_index in range(doc.page_count):
             page = doc.load_page(page_index)
             for panel in self.panels.values():

@@ -150,7 +150,6 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
             except Exception:
                 pass
             self.doc = None
-
         try:
             with open(pdf_path, "rb") as fh:
                 data = fh.read()
