@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -276,6 +275,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # fallback: clone the currently displayed document
             data = self.pdf_view.doc.write()
         doc = fitz.open(stream=data, filetype="pdf")
+
         for page_index in range(doc.page_count):
             page = doc.load_page(page_index)
             for panel in self.panels.values():
