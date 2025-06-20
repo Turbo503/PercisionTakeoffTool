@@ -270,7 +270,17 @@ class MainWindow(QtWidgets.QMainWindow):
     def _export_pdf(self, dest: Path):
         if not self.pdf_view.doc:
             return
-        doc = fitz.open(self.pdf_file)
+        # build a fresh document from the originally loaded bytes
+        data = getattr(self.pdf_view, "pdf_bytes", None)
+        if data:
+            base_doc = fitz.open(stream=data, filetype="pdf")
+            doc = fitz.open()
+            doc.insert_pdf(base_doc)
+            base_doc.close()
+        else:
+            # fallback to using the in-memory document directly
+            doc = fitz.open()
+            doc.insert_pdf(self.pdf_view.doc)
         for page_index in range(doc.page_count):
             page = doc.load_page(page_index)
             for panel in self.panels.values():
@@ -292,5 +302,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                 width=h.pen().widthF(),
                                 overlay=True,
                             )
-        doc.save(dest)
+        doc.save(str(dest), garbage=4, deflate=True)
+        doc.close()
         QtWidgets.QMessageBox.information(self, "Saved", f"PDF written to:\n{dest}")
