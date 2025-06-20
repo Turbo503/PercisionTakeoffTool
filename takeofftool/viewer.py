@@ -142,8 +142,12 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
 
     # ------------------------------------------------------------------
     def load_pdf(self, pdf_path: str):
+        """Load ``pdf_path`` without holding a filesystem lock."""
         try:
-            self.doc = fitz.open(pdf_path)
+            with open(pdf_path, "rb") as fh:
+                data = fh.read()
+            # open from memory so the original file isn't locked
+            self.doc = fitz.open(stream=data, filetype="pdf")
         except Exception as e:
             QtWidgets.QMessageBox.warning(self, "Error", f"Failed to open PDF:\n{e}")
             return

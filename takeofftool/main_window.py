@@ -270,7 +270,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def _export_pdf(self, dest: Path):
         if not self.pdf_view.doc:
             return
-        doc = fitz.open(self.pdf_file)
+        # clone the currently loaded document to avoid file locking issues
+        doc = fitz.open()
+        doc.insert_pdf(self.pdf_view.doc)
         for page_index in range(doc.page_count):
             page = doc.load_page(page_index)
             for panel in self.panels.values():
