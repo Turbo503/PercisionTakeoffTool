@@ -95,6 +95,7 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
 
         # pdf
         self.doc: fitz.Document | None = None
+        self.pdf_bytes: bytes | None = None
         self.current_page: int = -1
 
     # ── drawing‑mode toggle ────────────────────────────────────────────
@@ -146,6 +147,9 @@ class PDFGraphicsView(QtWidgets.QGraphicsView):
         try:
             with open(pdf_path, "rb") as fh:
                 data = fh.read()
+            # store for later exports
+            self.pdf_bytes = data
+
             # open from memory so the original file isn't locked
             self.doc = fitz.open(stream=data, filetype="pdf")
         except Exception as e:
