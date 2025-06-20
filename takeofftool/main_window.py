@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -277,6 +276,7 @@ class MainWindow(QtWidgets.QMainWindow):
             doc = fitz.open()
             doc.insert_pdf(base_doc)
             base_doc.close()
+
         else:
             # fallback to using the in-memory document directly
             doc = fitz.open()
